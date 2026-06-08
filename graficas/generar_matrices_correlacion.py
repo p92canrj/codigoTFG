@@ -22,11 +22,11 @@ for ds in datasets:
         print(f"Procesando {ds}...")
         df = pd.read_csv(ds)
         
-        # Eliminamos las variables temporales básicas y la variable objetivo para que la matriz sea más clara
+        # Eliminamos las variables temporales básicas y la variable objetivo
         cols_to_drop = ['year', 'month', 'day', 'hour', 'minute', 'visibilidad_ordinal']
         df_inputs = df.drop(columns=[c for c in cols_to_drop if c in df.columns], errors='ignore')
         
-        # Renombramos las columnas de roll_proportion para que no alarguen tanto los ejes
+        # Renombramos las columnas de roll_proportion para que no se alarguen tanto los ejes
         import re
         df_inputs.columns = [re.sub(r'roll_proportion_(\d+)_class_(\d+)\.0', r'roll_pr_\1_cl\2', c) for c in df_inputs.columns]
         
@@ -34,23 +34,22 @@ for ds in datasets:
         
         # Para datasets con muchas variables, ajustamos el tamaño de la figura y de las fuentes
         if 'areg_era5' in ds or 'areg_only' in ds:
-            plt.figure(figsize=(36, 28)) # Tamaño mucho más grande para datasets complejos
-            annot_size = 32  # Aumentado por recomendación del tutor (antes 25)
-            title_size = 60  # Título más grande para mantener proporción
-            tick_size = 30   # Nombres de variables (antes 22)
-            cbar_tick_size = 35 # Números de la barra (antes 25)
+            plt.figure(figsize=(36, 28))
+            annot_size = 32
+            title_size = 60
+            tick_size = 30
+            cbar_tick_size = 35
         else:
             plt.figure(figsize=(18, 14))
-            annot_size = 30  # Antes 20
+            annot_size = 30
             title_size = 40
-            tick_size = 24   # Antes 18
+            tick_size = 24
             cbar_tick_size = 28
         
         # Generar heatmap
         ax = sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".2f", vmin=-1, vmax=1, 
                     linewidths=.5, cbar_kws={"shrink": .8}, annot_kws={"size": annot_size})
         
-        # Cambiar el tamaño de los números de la barra lateral (colorbar)
         cbar = ax.collections[0].colorbar
         cbar.ax.tick_params(labelsize=cbar_tick_size)
         

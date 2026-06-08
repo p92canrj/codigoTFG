@@ -25,24 +25,19 @@ nombres_datasets = {
     'LEVX_sensors_areg_era5': 'Conjunto de datos completo (LEVX)'
 }
 
-# 1. Cargamos el Excel (pestaña cruda con las 30 semillas)
-# He puesto el archivo 'FINAL' más actualizado que usamos en el resto de scripts
 ruta_excel = r'../prepared_results_def/20260605_121221_recap_FINAL.xlsx'
-nombre_pestana = 'MS' # Cambiar por MMAE, MS, BA, etc.
+nombre_pestana = 'MS'
 
 df_metric = pd.read_excel(ruta_excel, sheet_name=nombre_pestana, index_col=0, header=0)
 
-# 2. Elegimos nuestro dataset estrella
 dataset_elegido = 'LEVX_sensors_areg_era5'
 
-# 3. Filtramos las columnas de ese dataset
 sufijo = f"_{dataset_elegido}"
 columnas_dataset = [col for col in df_metric.columns if col.endswith(sufijo)]
-df_dataset = df_metric[columnas_dataset].copy() # Añadimos .copy() para evitar warnings
+df_dataset = df_metric[columnas_dataset].copy()
 
-# Renombramos quitando el sufijo del dataset
 df_dataset.columns = [col.replace(sufijo, "") for col in df_dataset.columns]
-# Renombramos usando los nombres amigables de los modelos
+# Renombramos usando los nombres que he puesto arriba
 df_dataset.rename(columns=nombres_modelos, inplace=True)
 
 # 4. Definimos qué dos modelos queremos enfrentar cara a cara
@@ -55,7 +50,7 @@ modelo_2 = nombres_modelos.get(modelo_2_raw, modelo_2_raw)
 # 5. Comprobamos si es una métrica donde "menor es mejor"
 lower_better = True if nombre_pestana in ['AMAE', 'MMAE', 'MAE'] else False
 
-# Nombre amigable del dataset
+# Nombre que he puesto arriba del dataset
 dataset_nombre_amigable = nombres_datasets.get(dataset_elegido, dataset_elegido)
 
 # 6. Generamos el Scatter Plot

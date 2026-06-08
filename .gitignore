@@ -20,7 +20,7 @@ __pycache__/
 Thumbs.db
 
 # Ignorar las carpetas de resultados si son generadas (descomentar si no se quieren subir)
-# results_debug/
+results_debug/
 # prepared_results_def/
 # graficas/
 

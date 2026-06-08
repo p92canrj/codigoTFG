@@ -28,9 +28,7 @@ for ds in datasets:
     airport_code = get_airport_name(ds)
     datos = pd.read_csv(ds)
     
-    # ==============================================================================
     # Conversión del formato fecha
-    # ==============================================================================
     datos['datetime'] = pd.to_datetime(datos[['year', 'month', 'day', 'hour', 'minute']])
     datos = datos.set_index('datetime')
     
@@ -45,16 +43,12 @@ for ds in datasets:
     datos['week_day'] = datos.index.dayofweek + 1
     datos['hour_day'] = datos.index.hour
 
-    # ==============================================================================
-    # Configuraciones visuales globales (tamaños de fuente aumentados)
-    # ==============================================================================
+    # Configuraciones visuales globales
     title_fs = 20
     label_fs = 16
     tick_fs = 14
 
-    # ==============================================================================
     # Gráfico 1: Distribución por mes
-    # ==============================================================================
     fig1, ax1 = plt.subplots(figsize=(10, 6))
     
     datos.boxplot(column='vis', by='month', ax=ax1, flierprops={'markersize': 3, 'alpha': 0.1})
@@ -64,7 +58,7 @@ for ds in datasets:
     ax1.set_xlabel('Mes del año', fontsize=label_fs)
     ax1.set_title(f'Distribución de la Visibilidad por Mes - {airport_code}', fontsize=title_fs)
     ax1.tick_params(axis='both', which='major', labelsize=tick_fs)
-    fig1.suptitle('') # Borra el título automático extra de pandas
+    fig1.suptitle('')
 
     plt.tight_layout()
     
@@ -73,9 +67,7 @@ for ds in datasets:
     plt.savefig(f'{out_base}.pdf', bbox_inches='tight')
     plt.close(fig1)
 
-    # ==============================================================================
     # Gráfico 2: Distribución por día de la semana
-    # ==============================================================================
     fig2, ax2 = plt.subplots(figsize=(10, 6))
     
     datos.boxplot(column='vis', by='week_day', ax=ax2, flierprops={'markersize': 3, 'alpha': 0.1})
@@ -94,9 +86,7 @@ for ds in datasets:
     plt.savefig(f'{out_base}.pdf', bbox_inches='tight')
     plt.close(fig2)
 
-    # ==============================================================================
     # Gráfico 3: Distribución por hora del día
-    # ==============================================================================
     fig3, ax3 = plt.subplots(figsize=(12, 6))
     
     datos.boxplot(column='vis', by='hour_day', ax=ax3, flierprops={'markersize': 3, 'alpha': 0.1})
@@ -115,9 +105,7 @@ for ds in datasets:
     plt.savefig(f'{out_base}.pdf', bbox_inches='tight')
     plt.close(fig3)
 
-    # ==============================================================================
     # Gráfico 4: Promedio a lo largo de la semana
-    # ==============================================================================
     fig4, ax4 = plt.subplots(figsize=(12, 6))
     
     mean_day_hour = datos.groupby(["week_day", "hour_day"])["vis"].mean()

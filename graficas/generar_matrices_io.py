@@ -22,7 +22,6 @@ for ds in datasets:
         print(f"Procesando {ds}...")
         df = pd.read_csv(ds)
         
-        # Identificamos cuál es la variable objetivo (a veces es 'visibilidad_ordinal', otras veces 'vis')
         target_col = 'visibilidad_ordinal'
         if target_col not in df.columns:
             if 'vis' in df.columns:
@@ -42,20 +41,18 @@ for ds in datasets:
         # Calcular la correlación total
         corr = df_clean.corr()
         
-        # Extraer solo la columna correspondiente a la variable objetivo (y quitamos la correlación consigo misma)
-        # Ordenamos los valores para que se vea claramente qué variables influyen más (positiva y negativamente)
+        # Extraer solo la columna correspondiente a la variable objetivo
         corr_target = corr[[target_col]].drop(index=target_col).sort_values(by=target_col, ascending=False)
         
-        # Configurar tamaños dinámicos según el volumen de datos (agrandado respecto al original para mayor legibilidad)
         if 'areg_era5' in ds or 'areg_only' in ds:
-            plt.figure(figsize=(21, 28)) # Figura mucho más alta para datasets grandes
+            plt.figure(figsize=(21, 28))
             annot_size = 35
             title_size = 60
             label_size = 45
             tick_size = 35
             cbar_tick_size = 35
         else:
-            plt.figure(figsize=(8, 14)) # Ajustado ligeramente el ancho
+            plt.figure(figsize=(8, 14))
             annot_size = 30
             title_size = 40
             label_size = 30
@@ -66,7 +63,7 @@ for ds in datasets:
         ax = sns.heatmap(corr_target, annot=True, cmap='coolwarm', fmt=".2f", vmin=-1, vmax=1, 
                     linewidths=.5, cbar_kws={"shrink": .8}, annot_kws={"size": annot_size})
         
-        # Cambiar el tamaño de los números de la barra lateral (colorbar)
+        # Cambiar el tamaño de los números de la barra lateral
         cbar = ax.collections[0].colorbar
         cbar.ax.tick_params(labelsize=cbar_tick_size)
         
@@ -97,7 +94,7 @@ for ds in datasets:
         out_path_pdf = out_base + '.pdf'
         
         plt.savefig(out_path_png, dpi=300, bbox_inches='tight')
-        plt.savefig(out_path_pdf, bbox_inches='tight') # Formato PDF para LaTeX
+        plt.savefig(out_path_pdf, bbox_inches='tight')
         plt.close()
         print(f"  Guardado en {out_path_png} y {out_path_pdf}")
     else:

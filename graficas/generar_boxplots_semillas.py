@@ -25,34 +25,30 @@ nombres_datasets = {
     'LEVX_sensors_areg_era5': 'Conjunto de datos completo (LEVX)'
 }
 
-# Corregido el pequeño error en el nombre del archivo (tenía un 2 extra al principio)
 ruta_excel = r'../prepared_results_def/20260605_121221_recap_FINAL.xlsx'
 nombre_pestana = 'AMAE'
 
-# 1. Cargamos el Excel indicando que solo hay una fila de cabecera (header=0)
+# 1. Cargamos el Excel
 df_metric = pd.read_excel(ruta_excel, sheet_name=nombre_pestana, index_col=0, header=0)
 
 # 2. Elegimos el dataset
 dataset_elegido = 'LEVX_sensors_areg_era5' 
 
-# 3. Filtramos las columnas que pertenecen a este dataset (las que terminan en "_LEST_sensors_areg_ready")
+# 3. Filtramos las columnas que pertenecen a este dataset
 sufijo = f"_{dataset_elegido}"
 columnas_dataset = [col for col in df_metric.columns if col.endswith(sufijo)]
 
-# Nos quedamos solo con esas columnas
 df_dataset = df_metric[columnas_dataset].copy()
 
-# 4. Renombramos las columnas para quitar el sufijo del dataset
+# 4. Renombramos las columnas
 df_dataset.columns = [col.replace(sufijo, "") for col in df_dataset.columns]
 
-# Renombramos también usando los nombres amigables
+# Renombramos también usando los nombres que he puesto arriba
 df_dataset.rename(columns=nombres_modelos, inplace=True)
 
 # 5. Generamos el Boxplot
 plt.figure(figsize=(14, 8))
 sns.boxplot(data=df_dataset)
-
-# sns.swarmplot(data=df_dataset, color=".25", size=3, alpha=0.6) # Descomentar para ver los puntos
 
 dataset_nombre_amigable = nombres_datasets.get(dataset_elegido, dataset_elegido)
 plt.title(f'Variabilidad de {nombre_pestana} en 30 ejecuciones\nDataset: {dataset_nombre_amigable}', fontsize=22)

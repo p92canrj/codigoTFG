@@ -66,7 +66,7 @@ model_names = {
     'ordinaldecomposition': 'Descomposición Ordinal'
 }
 
-# Crear carpeta para guardar las imágenes (ahora se llamará matrices_confusion)
+# Crear carpeta para guardar las imágenes
 output_dir = Path("matrices_confusion")
 output_dir.mkdir(exist_ok=True)
 

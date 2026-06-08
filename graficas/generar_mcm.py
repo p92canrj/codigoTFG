@@ -13,26 +13,24 @@ nombres_modelos = {
     'ordinaldecomposition': 'Descomp. Ordinal'
 }
 
-# Configuración inicial
 ruta_excel = r'../prepared_results_def/20260605_121221_recap_FINAL.xlsx'
-metrica = 'CCR' # <--- Puedes cambiar la métrica aquí
+metrica = 'CCR'
 
 # 1. Cargamos la hoja "Average" del Excel
 df_avg = pd.read_excel(ruta_excel, sheet_name='Average')
 
-# Reemplazamos los nombres de los estimadores por los amigables
+# Reemplazamos los nombres de los estimadores por los que he puesto arriba
 df_avg['estimator_name'] = df_avg['estimator_name'].replace(nombres_modelos)
 
 # Hacemos un "pivot" para tener los modelos como columnas
 df_pivot = df_avg.pivot(index='dataset', columns='estimator_name', values=metrica)
 
-# 2. Definimos los modelos que queremos someter al test (nombres originales)
+# 2. Definimos los modelos que queremos someter al test
 modelos_estocasticos_raw = ["lightgbmclassifier_fast", "logisticregressor", "nnop", "nnpom"]
 
-# Los traducimos a los nombres amigables para poder filtrarlos del df_pivot (ya renombrado)
+# Los traducimos a los nombres que he puesto arriba para poder filtrarlos del df_pivot
 modelos_estocasticos = [nombres_modelos.get(m, m) for m in modelos_estocasticos_raw]
 
-# Nos quedamos SOLO con esos modelos
 df_estocasticos = df_pivot[modelos_estocasticos]
 
 # 3. Comprobamos si es una métrica donde "menor es mejor"
@@ -41,9 +39,9 @@ lower_better = True if metrica in ['AMAE', 'MMAE', 'MAE'] else False
 # 4. Generamos la Matriz Visual (Wilcoxon-Holm)
 f = create_multi_comparison_matrix(
     df_estocasticos, 
-    font_size=14, # <--- Ajustado para que el texto sea legible pero no se superponga
+    font_size=14,
     pvalue_correction="holm",
-    pvalue_test_params={"alternative": "two-sided"}, # Para que los p-values sean simétricos
+    pvalue_test_params={"alternative": "two-sided"},
     higher_stat_better=not lower_better,
     order_stats_increasing=lower_better
 )
@@ -52,17 +50,15 @@ f = create_multi_comparison_matrix(
 carpeta_salida = 'mcm_plots'
 os.makedirs(carpeta_salida, exist_ok=True)
 
-# 6. Guardamos la imagen indicando que es el test de estocásticos
+# 6. Guardamos la imagen
 nombre_archivo_png = os.path.join(carpeta_salida, f'mcm_{metrica}_estocasticos_recap.png')
 nombre_archivo_pdf = os.path.join(carpeta_salida, f'mcm_{metrica}_estocasticos_recap.pdf')
 
-# Ajustamos las dimensiones de la figura antes de guardar para dar "respiro" al texto
 f.set_size_inches(12, 10)
 
 f.savefig(nombre_archivo_png, dpi=300, bbox_inches='tight')
-f.savefig(nombre_archivo_pdf, bbox_inches='tight') # Guardar en formato vectorial para LaTeX
+f.savefig(nombre_archivo_pdf, bbox_inches='tight')
 
-# Mostrar la gráfica en pantalla
 plt.show()
 
 print(f"¡Matriz MCM guardada como {nombre_archivo_png} y también en PDF!")

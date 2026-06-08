@@ -13,22 +13,19 @@ nombres_modelos = {
     'ordinaldecomposition': 'Descomp. Ordinal'
 }
 
-
-# Configuración inicial
 ruta_excel = r'../prepared_results_def/20260605_121221_recap_FINAL.xlsx'
 metrica = 'AMAE' # <--- Puedes cambiar la métrica aquí
 
 # 1. Cargamos la hoja "Average" del Excel
 df_avg = pd.read_excel(ruta_excel, sheet_name='Average')
 
-# Reemplazamos los nombres de los estimadores por los amigables
+# Reemplazamos los nombres de los estimadores por los que he puesto arriba
 df_avg['estimator_name'] = df_avg['estimator_name'].replace(nombres_modelos)
 
 # Hacemos un "pivot" para tener los modelos como columnas
 df_pivot = df_avg.pivot(index='dataset', columns='estimator_name', values=metrica)
 
-# 2. Definimos qué dos modelos queremos enfrentar cara a cara. 
-# Si están en el diccionario, cogemos su nombre amigable, sino el original.
+# 2. Definimos qué dos modelos queremos enfrentar cara a cara.
 modelo_1_raw = "nnpom"
 modelo_2_raw = "lightgbmclassifier_fast"
 
@@ -64,7 +61,6 @@ if modelo_1 in df_pivot.columns and modelo_2 in df_pivot.columns:
     os.makedirs(carpeta_salida, exist_ok=True)
 
     # 5. Guardamos la imagen
-    # Limpiamos los nombres de los modelos para el archivo final (quitamos espacios y puntos)
     mod1_file = modelo_1.replace(' ', '_').replace('.', '')
     mod2_file = modelo_2.replace(' ', '_').replace('.', '')
     

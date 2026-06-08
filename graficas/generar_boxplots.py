@@ -13,14 +13,14 @@ nombres_modelos = {
     'ordinaldecomposition': 'Descomp. Ordinal'
 }
 
-# 1. Cargamos la hoja "Average" del nuevo Excel
+# 1. Cargamos la hoja "Average" del excel de resultados
 ruta_excel = r'../prepared_results_def/20260605_121221_recap_FINAL.xlsx'
 df_avg = pd.read_excel(ruta_excel, sheet_name='Average')
 
-# Reemplazamos los nombres de los estimadores por los amigables
+# Reemplazamos los nombres de los estimadores que he puesto arriba
 df_avg['estimator_name'] = df_avg['estimator_name'].replace(nombres_modelos)
 
-# 2. Elegimos la métrica que queremos visualizar (puedes cambiar MAE por QWK, CCR, etc.)
+# 2. Elegimos la métrica que queremos visualizar
 metrica = 'MS'
 
 # 3. Hacemos un "pivot" para que los datasets sean las filas y los estimadores sean las columnas
