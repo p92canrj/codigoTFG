@@ -1,0 +1,31 @@
+# Entornos virtuales
+venv/
+env/
+.env
+
+# Archivos compilados y de caché
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Archivos de configuración de editores / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar las carpetas de resultados si son generadas (descomentar si no se quieren subir)
+# results_debug/
+# prepared_results_def/
+# graficas/
+
+# Ignorar datasets grandes (descomentar si son demasiado grandes para GitHub)
+# datasets/
+
+# Ignorar la librería orca-python
+orca-python/
