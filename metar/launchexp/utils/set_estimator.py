@@ -74,7 +74,7 @@ def set_estimator(
                 estimator = NNPOM(**base_grid)
 
             case "ordinaldecomposition":
-                from orca_python.classifiers.OrdinalDecomposition import OrdinalDecomposition
+                from launchexp.ordinal_classification import OrdinalDecomposition
 
                 estimator = OrdinalDecomposition(**base_grid)
 
